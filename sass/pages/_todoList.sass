@@ -1,0 +1,153 @@
+
+.card
+    border-radius: 10px
+    max-width: 100%
+    background-color: #fff
+    margin-bottom: 0.5rem
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15)
+
+.container
+    width: 500px
+    margin: 3rem auto 1.5rem auto
+    @include mobile
+        margin: 0
+        padding: 16px 12px 18px 12px
+
+    h1
+        font-size: 3rem
+        text-align: center
+        font-family: "Baloo Tamma 2"
+        letter-spacing: 0.5rem
+        font-weight: bold
+        margin-bottom: 1.5rem
+    .input
+        display: flex
+        padding: 4px 4px 4px 16px
+        input
+            width: 100%
+            outline: 0
+            font-size: 1rem
+            padding-right: 1rem 
+            border: 0
+        button
+            +size(40px)
+            flex-shrink: 0
+            font-size: 2rem
+            cursor: pointer
+            border: none
+            border-radius: 10px
+            background-color: $dark
+            color: #fff
+            &:hover
+                transform: scale(.95)
+    .content
+        overflow: hidden
+        &.hide
+            display: none
+        .tab
+            display: flex
+            text-align: center
+            color: $gray
+            font-size: 14px
+            li
+                padding: 1rem
+                width: 100%
+                border-bottom: 2px solid $light
+                cursor: pointer
+                user-select: none
+                &.active
+                    border-bottom: 2px solid $dark
+                    color: $dark
+                &:hover
+                    background-color: rgba($dark,.8)
+                    color: $default
+        .todo-content
+            padding: .5rem 1rem 1rem 1rem
+            .todo-list
+                li
+                    position: relative
+                    padding-right: 2rem
+                    overflow: hidden
+                    &:hover
+                        .del-btn
+                            right: 0
+                            opacity: 1
+                    label
+                        position: relative
+                        display: block
+                        padding-left: 45px
+                        input
+                            position: absolute
+                            left: 0
+                            top: 0
+                            display: block
+                            width: 100%
+                            height: 100%
+                            margin: 0
+                            opacity: 0
+                            user-select: none
+                            &:checked
+                                & ~ span
+                                    text-decoration: line-through
+                                    color: $gray
+                                    &::before
+                                        transform: translateY(-50%) scale(0)
+                                    &::after
+                                        opacity: 1
+                        span
+                            display: block
+                            line-height: 1.5
+                            padding: 1rem 0rem
+                            border-bottom: 1px solid $light
+                            &::before,&::after
+                                content: ""
+                                display: block
+                                position: absolute
+                                user-select: none
+                                cursor: pointer
+                                pointer-events: none
+                                transition: .3s
+                            &::before
+                                +size(20px)
+                                border-radius: 5px
+                                border: 1px solid #000
+                                left: 0
+                                top: 50%
+                                transform: translateY(-50%) scale(1)
+                            &::after
+                                +size(.5rem,16px)
+                                border-bottom: 3px solid $default
+                                border-right: 3px solid $default
+                                opacity: 0
+                                left: 8px
+                                top: 42%
+                                transform: translateY(-50%) rotate(45deg)
+                    .del-btn
+                        position: absolute
+                        right: -20% 
+                        top: 50%
+                        opacity: 0
+                        color: #000
+                        font-size: 1.5rem
+                        transform: translateY(-50%) scale(1)
+                        transition: .3s
+                        @keyframes wave
+                            from
+                                transform: translateY(-50%)  rotate(-15deg)
+                            to
+                                transform: translateY(-50%)  rotate(15deg)
+                        &:hover
+                            animation: wave .3s
+        .footer
+            font-size: 14px
+            display: flex
+            justify-content: space-between
+            padding: 24px 32px 16px 8px
+            a
+                color: $gray
+                &:hover
+                    text-decoration: underline
+
+
+
+

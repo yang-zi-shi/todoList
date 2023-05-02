@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO List</title>
+</head>
+<body>
+    <div class="container">
+        <h1>TODO LIST</h1>
+        <div class="input card">
+            <input type="text" placeholder="請輸入代辦事項">
+            <button>+</button>
+        </div>
+        <div class="content card">
+            <ul class="tab">
+                <li data-status="all" class="active">全部</li>
+                <li data-status="pending">待完成</li>
+                <li data-status="finish">已完成</li>
+            </ul>
+            <div class="todo-content">
+                <ul class="todo-list">
+                </ul>
+                <div class="footer">
+                    <p><span class="pending-count">5</span>個待完成項目</p>
+                    <a class="clear-finish" href="#">清除已完成項目</a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <script  src="./bundle.js"></script>
+</body>
+</html>
