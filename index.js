@@ -1,5 +1,5 @@
 import sass from "./sass/all.sass"
-let todoList;
+let todoList = null;
 let tabBtn = document.querySelectorAll(".tab li");
 let todo = `<li>
                 <label for="">
@@ -15,68 +15,56 @@ let input = document.querySelector(".input input");
 let pendingCount = document.querySelector(".pending-count");
 let clearFinish = document.querySelector(".clear-finish");
 
-//渲染todolist
-function render(arr=null){
-    let contentAreaClass = contentArea.classList;
-    //判斷是否有陣列傳入
-    todoList = JSON.parse(localStorage.getItem("todolist")) || [];
+function getTodo(){
+    return JSON.parse(localStorage.getItem("todolist")) || [];
+}
 
-    if(Array.isArray(todoList)){
-        if(!todoList.length && !arr){
-            contentAreaClass.add("hide");
-        }else{
-            //將hide class移除(如果有)
-            if(contentAreaClass.contains('hide')){
-                contentAreaClass.remove("hide");
-            }
-            ulRender(todoList);
-            //計算代辦數量
-            pendingCount.textContent = todoList.filter((item)=>item.status == false).length;
+function setTodo(){
+    localStorage.setItem("todolist",JSON.stringify(todoList));
+}
+
+//切換標籤
+function switchTab(target){
+    //判斷是否有陣列傳入
+    todoList = getTodo() || [];
+    let contentAreaClass = contentArea.classList;
+    let check = Object.keys(target.dataset).length;
+    let checkStatus = "status" in target.dataset;
+
+    if(!Array.isArray(todoList)){
+        return;
+    }
+
+    if(!todoList.length){
+        contentAreaClass.add("hide");
+    }else{
+        //將hide class移除(如果有)
+        if(contentAreaClass.contains('hide')){
+            contentAreaClass.remove("hide");
         }
     }
-}
-//載入頁面時初次渲染
-render();
 
-//tab class切換
-function tabClass(ele){
-    ele.classList.add("active");
+    tabBtn.forEach((li)=> li.classList.remove("active"));
+    if(check >0 && checkStatus){
+        tabJudgment(target);
+    }
 }
 
 //tab內容判斷
 function  tabJudgment(target){
     switch(target.dataset.status){
         case "all":
-            tabClass(target);
-            render();
+            target.classList.add("active");
+            ulRender(todoList);
             break;
         case "pending":
-            tabClass(target);
-            if(todoList.length == 0){
-                render();
-            }else{
-                ulRender(todoList.filter(item => !item.status));
-            }
+            target.classList.add("active");
+            ulRender(todoList.filter(item => !item.status));
             break;
         case "finish":
-            tabClass(target);
-            if(todoList.length == 0){
-                render();
-            }else{
-                ulRender(todoList.filter(item => item.status));
-            }
+            target.classList.add("active");
+            ulRender(todoList.filter(item => item.status));
             break;
-    }
-}
-
-
-//切換標籤
-function switchTab(target){
-    let check = Object.keys(target.dataset).length;
-    let checkStatus = "status" in target.dataset;
-    tabBtn.forEach((li)=> li.classList.remove("active"));
-    if(check >0 && checkStatus){
-        tabJudgment(target);
     }
 }
 
@@ -101,7 +89,13 @@ function ulRender(arr){
             btn.onclick = deleteTodo;
         }
     });
+
+    //計算代辦數量
+    pendingCount.textContent = todoList.filter((item)=>item.status == false).length;
 }
+
+//載入頁面時初次渲染
+switchTab(tabBtn[0]);
 
 //delete todo 功能
 function deleteTodo(e){
@@ -112,7 +106,7 @@ function deleteTodo(e){
     if(obj !== -1){
         todoList.splice(obj,1);
     }
-    localStorage.setItem("todolist",JSON.stringify(todoList));
+    setTodo();
     
     tabBtn.forEach((li)=> {
         if(li.classList.contains("active")){
@@ -120,7 +114,7 @@ function deleteTodo(e){
         };
     });
 
-    tabJudgment(target);
+    switchTab(target);
 }
 //新增todo功能
 function addTodo(){
@@ -138,9 +132,9 @@ function addTodo(){
         todoList.push(obj);
     }
 
-    localStorage.setItem("todolist",JSON.stringify(todoList));
+    setTodo();
     input.value ="";
-    render();
+    switchTab(tabBtn[0]);
 }
 
 // 初始化切換標籤
@@ -153,12 +147,20 @@ tabBtn.forEach((li)=>{
 //todo狀態切換
 todoUl.addEventListener("click",function(e){
     if(e.target.nodeName == "INPUT"){
+        let target =null;
         let li = e.target.closest("li");
         let id = li.querySelector(".del-btn").dataset.id;
         let obj = todoList.findIndex((item)=>item.id == id);
         todoList[obj].status = !todoList[obj].status;
-        localStorage.setItem("todolist",JSON.stringify(todoList));
-        render();
+        setTodo();
+
+        tabBtn.forEach((li)=> {
+            if(li.classList.contains("active")){
+                target = li;
+            };
+        });
+    
+        switchTab(target);
     }
 });
 
@@ -166,7 +168,7 @@ todoUl.addEventListener("click",function(e){
 clearFinish.addEventListener("click",function(e){
     e.preventDefault();
     todoList = todoList.filter(item => !item.status);
-    localStorage.setItem("todolist",JSON.stringify(todoList));
+    setTodo();
     switchTab(tabBtn[0]);
 });
 
