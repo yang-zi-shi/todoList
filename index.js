@@ -6,7 +6,7 @@ let todo = `<li>
                     <input type="checkbox" {{checked}}>
                     <span>{{content}}</span>
                 </label>
-                <a data-id="{{id}}" class="del-btn" href="#">&#10006;</a>
+                <a tabindex="-1" data-id="{{id}}" class="del-btn" href="#">&#10006;</a>
             </li>`;
 let todoUl = document.querySelector(".todo-content .todo-list");
 let contentArea = document.querySelector(".content");
