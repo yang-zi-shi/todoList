@@ -43,26 +43,40 @@ function tabClass(ele){
     ele.classList.add("active");
 }
 
+//tab內容判斷
+function  tabJudgment(target){
+    switch(target.dataset.status){
+        case "all":
+            tabClass(target);
+            render();
+            break;
+        case "pending":
+            tabClass(target);
+            if(todoList.length == 0){
+                render();
+            }else{
+                ulRender(todoList.filter(item => !item.status));
+            }
+            break;
+        case "finish":
+            tabClass(target);
+            if(todoList.length == 0){
+                render();
+            }else{
+                ulRender(todoList.filter(item => item.status));
+            }
+            break;
+    }
+}
+
+
 //切換標籤
 function switchTab(target){
     let check = Object.keys(target.dataset).length;
     let checkStatus = "status" in target.dataset;
     tabBtn.forEach((li)=> li.classList.remove("active"));
     if(check >0 && checkStatus){
-        switch(target.dataset.status){
-            case "all":
-                tabClass(target);
-                render();
-                break;
-            case "pending":
-                tabClass(target);
-                ulRender(todoList.filter(item => !item.status));
-                break;
-            case "finish":
-                tabClass(target);
-                ulRender(todoList.filter(item => item.status));
-                break;
-        }
+        tabJudgment(target);
     }
 }
 
@@ -93,13 +107,20 @@ function ulRender(arr){
 function deleteTodo(e){
     let id =e.target.dataset.id;
     let obj =todoList.findIndex((item)=>item.id == id);
+    let target =null;
     
     if(obj !== -1){
         todoList.splice(obj,1);
     }
-    
     localStorage.setItem("todolist",JSON.stringify(todoList));
-    render();
+    
+    tabBtn.forEach((li)=> {
+        if(li.classList.contains("active")){
+            target = li;
+        };
+    });
+
+    tabJudgment(target);
 }
 //新增todo功能
 function addTodo(){
