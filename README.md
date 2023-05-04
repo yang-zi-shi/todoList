@@ -1,3 +1,3 @@
 # todoList
-![image](https://user-images.githubusercontent.com/78673488/236187070-ad635ca6-8196-459c-9b69-ad0cad86005c.png)
+![image](https://user-images.githubusercontent.com/78673488/236187937-216f1e94-7dea-4597-8599-c95cbc77cc88.png)
 link: https://yang-zi-shi.github.io/todoList/
